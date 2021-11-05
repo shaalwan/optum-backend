@@ -2,6 +2,19 @@ var mongoose=require('mongoose');
 var Schema = mongoose.Schema;
 var passportLocalMongoose = require("passport-local-mongoose");
 
+var daySchema=new Schema({
+    startTime:{
+        type:'String'
+    },
+    endTime:{
+        type:'String'
+    },
+    medicine:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"Medicine"
+    }
+});
+
 var User=new Schema({
     //doctor or patient
     user_type:{
@@ -12,7 +25,8 @@ var User=new Schema({
     },
     lastName:{
         type:'String'
-    }
+    },
+    schedule:[daySchema]
 });
 
 User.plugin(passportLocalMongoose);

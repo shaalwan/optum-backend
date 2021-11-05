@@ -7,6 +7,7 @@ var passport = require("passport");
 var cors=require('cors');
 var mongoose=require('mongoose');
 var config=require('./config');
+var ScheduleRouter=require('./routes/schedule');
 
 //connecting to the database
 const connect = mongoose.connect(config.cloudUrl, {
@@ -44,6 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use("/schedule",ScheduleRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

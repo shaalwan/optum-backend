@@ -56,7 +56,7 @@ exports.verifyPatient=(req,res,next)=>{
 }
 
 //Verifying if user is doctor
-exports.verifyPatient=(req,res,next)=>{
+exports.verifyDoctor=(req,res,next)=>{
     if(req.user.user_type=='doctor'){
         next();
     }
