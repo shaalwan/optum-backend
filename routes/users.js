@@ -6,6 +6,13 @@ var jwt = require("jsonwebtoken");
 var config = require("../config");
 var authenticate = require("../authenticate");
 
+//getUserInfo
+router.get("/userInfo",authenticate.verifyUser, (req,res,next)=>{
+  res.statusCode = 200;
+  res.setHeader("Content-Type", "application/json");
+  res.json({ success: true, userInfo: req.user });
+});
+
 //SignUp a new user with username and password
 router.post("/signup", (req, res, next) => {
   console.log(req.body);
