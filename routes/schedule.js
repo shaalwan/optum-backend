@@ -69,16 +69,17 @@ router.post(
 );
 
 router.get(
-  "/viewSchedule",
+  "/viewSchedule/:userId",
   authenticate.verifyUser,
   authenticate.verifyDoctor,
   (req, res, next) => {
-    User.findById(req.user._id)
+    let userId=req.params.schedule;
+    User.findById(userId).populate('schedule.medicine')
       .then((user) => {
         //provide schedule in proper format
         res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
-        res.json({ success: true, info: usr });
+        res.json({ success: true, info: usr.schedule });
       })
       .catch((err) => {
         next(err);
