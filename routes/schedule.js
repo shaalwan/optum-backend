@@ -29,8 +29,10 @@ router.post(
   authenticate.verifyUser,
   authenticate.verifyDoctor,
   (req, res, next) => {
+    console.log(req.body.medicine);
     Medicine.create(req.body.medicine)
       .then((medicine) => {
+        console.log(medicine);
         res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
         res.json({ success: true, status: "Medicine added successfully!" });

@@ -6,6 +6,17 @@ var jwt = require("jsonwebtoken");
 var config = require("../config");
 var authenticate = require("../authenticate");
 
+//get all patients
+router.get("/getPatients",authenticate.verifyUser,authenticate.verifyDoctor,(req,res,next)=>{
+  User.find({user_type:'patient'}).then((users)=>{
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "application/json");
+    res.json({ success: true, users:users });
+  })
+  .catch((err)=>{
+    next(err);
+  });
+});
 //getUserInfo
 router.get("/userInfo",authenticate.verifyUser, (req,res,next)=>{
   res.statusCode = 200;
