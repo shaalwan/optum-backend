@@ -73,13 +73,13 @@ router.get(
   authenticate.verifyUser,
   authenticate.verifyDoctor,
   (req, res, next) => {
-    let userId=req.params.schedule;
+    let userId=req.params.userId;
     User.findById(userId).populate('schedule.medicine')
       .then((user) => {
         //provide schedule in proper format
         res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
-        res.json({ success: true, info: usr.schedule });
+        res.json({ success: true, info: user.schedule });
       })
       .catch((err) => {
         next(err);
