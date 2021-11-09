@@ -52,8 +52,8 @@ router.post(
       .then((user) => {
         //provide schedule in proper format
         user.schedule = req.body.schedule;
-        user
-          .save((usr) => {
+        user.save()
+          .then((usr) => {
             res.statusCode = 200;
             res.setHeader("Content-Type", "application/json");
             res.json({ success: true, info: usr });
@@ -73,8 +73,9 @@ router.get(
   authenticate.verifyUser,
   authenticate.verifyDoctor,
   (req, res, next) => {
-    let userId=req.params.userId;
-    User.findById(userId).populate('schedule.medicine')
+    let userId = req.params.userId;
+    User.findById(userId)
+      .populate("schedule.medicine")
       .then((user) => {
         //provide schedule in proper format
         res.statusCode = 200;
@@ -87,4 +88,4 @@ router.get(
   }
 );
 
-module.exports=router;
+module.exports = router;
