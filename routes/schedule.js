@@ -52,7 +52,8 @@ router.post(
       .then((user) => {
         //provide schedule in proper format
         user.schedule = req.body.schedule;
-        user.save()
+        user
+          .save()
           .then((usr) => {
             res.statusCode = 200;
             res.setHeader("Content-Type", "application/json");
@@ -87,5 +88,22 @@ router.get(
       });
   }
 );
-
+router.get(
+  "/viewSchedulePatient",
+  authenticate.verifyUser,
+  (req, res, next) => {
+    let userId = req.user._id;
+    User.findById(userId)
+      .populate("schedule.medicine")
+      .then((user) => {
+        //provide schedule in proper format
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json({ success: true, info: user.schedule });
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
+);
 module.exports = router;
