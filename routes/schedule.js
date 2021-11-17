@@ -30,7 +30,6 @@ router.post('/markComplete',authenticate.verifyUser,(req,res,next)=>{
       next(err);
     })
   })
-  .catch((err))
 });
 
 router.get(
