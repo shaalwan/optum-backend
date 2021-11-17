@@ -7,6 +7,32 @@ var jwt = require("jsonwebtoken");
 var config = require("../config");
 var authenticate = require("../authenticate");
 
+router.post('/markComplete',authenticate.verifyUser,(req,res,next)=>{
+  let scheduleId=req.body.scheduleId;
+  let userId=req.user._id;
+
+  User.findById(userId).then((usr)=>{
+    let schedule=usr.schedule;
+
+    for(let i=0;i<schedule.length;++i){
+      if(schedule[i]._id.toString()==scheduleId.toString()){
+        schedule[i].status='completed';
+      }
+    }
+    usr.schedule=schedule;
+
+    usr.save().then((resp)=>{
+      res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json({ success: true, schedule:schedule });
+    })
+    .catch((err)=>{
+      next(err);
+    })
+  })
+  .catch((err))
+});
+
 router.get(
   "/getMedicine",
   authenticate.verifyUser,

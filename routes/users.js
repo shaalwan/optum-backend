@@ -5,6 +5,7 @@ var passport = require("passport");
 var jwt = require("jsonwebtoken");
 var config = require("../config");
 var authenticate = require("../authenticate");
+var mailScheduler=require("./mailScheduler");
 
 //get all patients
 router.get("/getPatients",authenticate.verifyUser,authenticate.verifyDoctor,(req,res,next)=>{
@@ -22,6 +23,30 @@ router.get("/userInfo",authenticate.verifyUser, (req,res,next)=>{
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/json");
   res.json({ success: true, userInfo: req.user });
+});
+
+router.post('/editProfile',authenticate.verifyUser,(req,res,next)=>{
+  User.findById(req.user._id).then((usr)=>{
+    usr.aherence=req.body.aherence;
+    usr.age=req.body.age;
+    usr.marital_status=req.body.marital_status;
+    usr.gender=req.body.gender;
+    usr.location=req.body.location;
+    usr.avg_health_care_expense=req.body.avg_health_care_expense;
+    usr.health_insurance_company=req.body.health_insurance_company;
+
+    usr.save().then((resp)=>{
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ response:resp });
+    })
+    .catch((err)=>{
+      next(err);
+    });
+  })
+  .catch((err)=>{
+    next(err);
+  });
 });
 
 //SignUp a new user with username and password
@@ -80,6 +105,7 @@ router.post("/login", (req, res, next) => {
         var token = authenticate.getToken({ _id: req.user._id });
         res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
+        mailScheduler.job();
         res.json({
           success: true,
           status: "Successfully logged In!",
