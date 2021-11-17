@@ -1,7 +1,7 @@
 const schedule = require("node-schedule");
 let User = require("../models/User");
 let moment = require("moment");
-import { nanoid } from "nanoid";
+let nanoid =require("nanoid");
 var nodemailer=require("nodemailer");
 var notTakenTemplate=require("../templates/notTakenTemplate");
 
@@ -104,7 +104,7 @@ const job = (timeDelay) => {
       });
     }
   });
-  
+
     setTimeout(() => {
         setJober();
     },1000)
